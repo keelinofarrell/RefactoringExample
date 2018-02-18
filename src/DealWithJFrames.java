@@ -54,6 +54,7 @@ public class DealWithJFrames extends JFrame{
 	boolean openValues;
 	int currentItem = 0;
 	BankApplication bankapp;
+	FileService fileService;
 	
 	
 	public DealWithJFrames() {
@@ -470,7 +471,7 @@ public class DealWithJFrames extends JFrame{
 				
 				int answer = JOptionPane.showConfirmDialog(DealWithJFrames.this, "Do you want to save before quitting?");
 				if (answer == JOptionPane.YES_OPTION) {
-					bankapp.saveFileAs();
+					fileService.saveFileAs();
 					dispose();
 				}
 				else if(answer == JOptionPane.NO_OPTION)
@@ -526,7 +527,7 @@ public class DealWithJFrames extends JFrame{
 		
 		open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				bankapp.readFile();
+				fileService.readFile();
 				currentItem=0;
 				while(!table.containsKey(currentItem)){
 					currentItem++;
@@ -537,14 +538,14 @@ public class DealWithJFrames extends JFrame{
 		
 		save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				bankapp.writeFile();
+				fileService.writeFile();
 			}
 		});
 		
     	
     	saveAs.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				bankapp.saveFileAs();
+				fileService.saveFileAs();
 			}
 		});
 	}

@@ -29,10 +29,7 @@ public class CreateBankDialog extends JFrame {
 	ArrayList<BankAccount> accountList;
 
 	HashMap<Integer, BankAccount> table = new HashMap<Integer, BankAccount>();
-	
-	
-	
-	
+
 	public void put(int key, BankAccount value){
 		int hash = (key%TABLE_SIZE);
 
@@ -42,9 +39,7 @@ public class CreateBankDialog extends JFrame {
 		table.put(hash, value);
 	}
 	
-	
-	
-	
+
 	// Constructor code based on that for the Create and Edit dialog classes in the Shapes exercise.
 
 	JLabel accountIDLabel, accountNumberLabel, firstNameLabel, surnameLabel, accountTypeLabel, balanceLabel, overdraftLabel;
@@ -63,12 +58,6 @@ public class CreateBankDialog extends JFrame {
 		setLayout(new BorderLayout());
 		
 		JPanel dataPanel = new JPanel(new MigLayout());
-		
-		
-		
-		
-		
-		
 		
 		String[] comboTypes = {"Current", "Deposit"};
 		
@@ -137,12 +126,8 @@ public class CreateBankDialog extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				
-				
 				String accountNumber = accountNumberTextField.getText();
-				
-				
-							
-				
+			
 				String surname = surnameTextField.getText();
 				String firstName = firstNameTextField.getText();
 			
@@ -150,9 +135,7 @@ public class CreateBankDialog extends JFrame {
 				
 				String balanceStr = balanceTextField.getText();
 				String overdraftStr = overdraftTextField.getText();
-				
-				
-
+			
 				double balance;
 				double overdraft;
 				
