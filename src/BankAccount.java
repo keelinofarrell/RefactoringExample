@@ -60,14 +60,7 @@ public class BankAccount {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	
-	public void setAccType(String accType){
-		accType = accType;
-	}
-	
-	public String getAccType(){
-		return accountType;
-	}
+
 	
 	public String getFirstName() {
 		return firstName;

@@ -14,7 +14,7 @@ public class BankApplication {
 	
 	
 	public static void main(String[] args) {
-		BankApplication ba = new BankApplication();
+		new BankApplication();
 		
 	}
 	

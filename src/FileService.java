@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -24,9 +24,6 @@ public class FileService {
 	
 	private static RandomAccessFile input;
 	private static RandomAccessFile output;
-	private static final int NUMBER_RECORDS = 100;
-
-	
 	public static void openFileRead()
 	   {
 		
@@ -35,7 +32,7 @@ public class FileService {
 		int returnVal = fc.showOpenDialog(null);
 		 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
+            fc.getSelectedFile();
 
         } 
 
