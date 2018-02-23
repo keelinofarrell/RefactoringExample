@@ -103,22 +103,22 @@ public class FileService {
 	
 	public static void closeFile() 
 	   {
-	      try // close file and exit
+	      try 
 	      {
 	         if ( input != null )
 	            input.close();
-	      } // end try
+	      } 
 	      catch ( IOException ioException )
 	      {
 	         
 	    	  JOptionPane.showMessageDialog(null, "Error closing file.");//System.exit( 1 );
-	      } // end catch
-	   } // end method closeFile
+	      } 
+	   }
 	
 	public static void readRecords()
 	   {
 	      RandomAccessBankAccount record = new RandomAccessBankAccount();
-	      try // read a record and display
+	      try 
 	      {
 	         while ( true )
 	         {
@@ -143,29 +143,24 @@ public class FileService {
 				}
 				
 	            table.put(hash, ba);
-		
-
-	         } // end while
-	      } // end try
-	      catch ( EOFException eofException ) // close file
+	         } 
+	      } 
+	      catch ( EOFException eofException )
 	      {
-	         return; // end of file was reached
-	      } // end catch
+	         return; 
+	      }
 	      catch ( IOException ioException )
 	      {
 	    	  JOptionPane.showMessageDialog(null, "Error reading file.");
 	         System.exit( 1 );
-	      } // end catch
+	      }
 	   }
 	
 public static void saveToFile(){
 		
 	
 		RandomAccessBankAccount record = new RandomAccessBankAccount();
-	
-	      Scanner input = new Scanner( System.in );
 
-	      
 	      for (Map.Entry<Integer, BankAccount> entry : table.entrySet()) {
 			   record.setAccountID(entry.getValue().getAccountID());
 			   record.setAccountNumber(entry.getValue().getAccountNumber());
