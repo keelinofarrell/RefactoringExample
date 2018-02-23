@@ -3,16 +3,11 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,6 +27,10 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 public class DealWithJFrames extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	ArrayList<BankAccount> accountList = new ArrayList<BankAccount>();
 	static HashMap<Integer, BankAccount> table = new HashMap<Integer, BankAccount>();
 	private final static int TABLE_SIZE = 29;
@@ -221,20 +220,6 @@ public class DealWithJFrames extends JFrame{
 			}
 		};
 		
-		ActionListener next = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveOpenValues();
-				// No next if at end of list.
-				if (currentItem != (table.size()-1)) {
-					// Move to next item.
-						currentItem++;
-					while(!table.containsKey(currentItem) ){
-						currentItem++;
-					}
-					displayDetails(currentItem);			
-				}				
-			}
-		};
 		
 		ActionListener next1 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -277,12 +262,10 @@ public class DealWithJFrames extends JFrame{
 				}
 				
 				int minKey = Collections.min(keyList);
-				//System.out.println(minKey);
 				
 				if(currentItem>minKey){
 					currentItem--;
 					while(!table.containsKey(currentItem)){
-						//System.out.println("Current: " + currentItem + ", min key: " + minKey);
 						currentItem--;
 					}
 				}
@@ -471,15 +454,11 @@ public class DealWithJFrames extends JFrame{
 				
 				int answer = JOptionPane.showConfirmDialog(DealWithJFrames.this, "Do you want to save before quitting?");
 				if (answer == JOptionPane.YES_OPTION) {
-					fileService.saveFileAs();
+					FileService.saveFileAs();
 					dispose();
 				}
 				else if(answer == JOptionPane.NO_OPTION)
 					dispose();
-				else if(answer==0)
-					;
-				
-				
 				
 			}
 		});	
@@ -527,7 +506,7 @@ public class DealWithJFrames extends JFrame{
 		
 		open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				fileService.readFile();
+				FileService.readFile();
 				currentItem=0;
 				while(!table.containsKey(currentItem)){
 					currentItem++;
@@ -538,14 +517,14 @@ public class DealWithJFrames extends JFrame{
 		
 		save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				fileService.writeFile();
+				FileService.writeFile();
 			}
 		});
 		
     	
     	saveAs.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				fileService.saveFileAs();
+				FileService.saveFileAs();
 			}
 		});
 	}

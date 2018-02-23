@@ -37,8 +37,7 @@ public class FileService {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
 
-        } else {
-                }
+        } 
 
 		      try // open file
 		      {
