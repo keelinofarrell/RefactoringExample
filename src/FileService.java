@@ -6,8 +6,6 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -44,25 +42,24 @@ public class FileService {
 		      catch ( IOException ioException )
 		      {
 		    	  JOptionPane.showMessageDialog(null, "File Does Not Exist.");
-		      } // end catch
+		      } 
 			
-	   } // end method openFile
+	   } 
 	
 	static String fileToSaveAs = "";
 	
 	public static void openFileWrite()
 	   {
 		if(fileToSaveAs!=""){
-	      try // open file
+	      try 
 	      {
 	         output = new RandomAccessFile( fileToSaveAs, "rw" );
 	         JOptionPane.showMessageDialog(null, "Accounts saved to " + fileToSaveAs);
-	      } // end try
+	      } 
 	      catch ( IOException ioException )
 	      {
 	    	  JOptionPane.showMessageDialog(null, "File does not exist.");
-	      } // end catch
-		}
+	      }}
 		else
 			saveToFileAs();
 	   }
@@ -108,7 +105,7 @@ public class FileService {
 	      catch ( IOException ioException )
 	      {
 	         
-	    	  JOptionPane.showMessageDialog(null, "Error closing file.");//System.exit( 1 );
+	    	  JOptionPane.showMessageDialog(null, "Error closing file.");
 	      } 
 	   }
 	

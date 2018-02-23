@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,20 +34,20 @@ public class DealWithJFrames extends JFrame{
 	private final static int TABLE_SIZE = 29;
 	
 	
-	JMenuBar menuBar;
-	JMenu navigateMenu, recordsMenu, transactionsMenu, fileMenu, exitMenu;
-	JMenuItem nextItem, prevItem, firstItem, lastItem, findByAccount, findBySurname, listAll;
-	JMenuItem createItem, modifyItem, deleteItem, setOverdraft, setInterest;
-	JMenuItem deposit, withdraw, calcInterest;
-	JMenuItem open, save, saveAs;
-	JMenuItem closeApp;
-	JButton firstItemButton, lastItemButton, nextItemButton, prevItemButton;
-	JLabel accountIDLabel, accountNumberLabel, firstNameLabel, surnameLabel, accountTypeLabel, balanceLabel, overdraftLabel;
-	JTextField accountIDTextField, accountNumberTextField, firstNameTextField, surnameTextField, accountTypeTextField, balanceTextField, overdraftTextField;
+	private JMenuBar menuBar;
+	private JMenu navigateMenu, recordsMenu, transactionsMenu, fileMenu, exitMenu;
+	private JMenuItem nextItem, prevItem, firstItem, lastItem, findByAccount, findBySurname, listAll;
+	private JMenuItem createItem, modifyItem, deleteItem, setOverdraft, setInterest;
+	private JMenuItem deposit, withdraw, calcInterest;
+	private JMenuItem open, save, saveAs;
+	private JMenuItem closeApp;
+	private JButton firstItemButton, lastItemButton, nextItemButton, prevItemButton;
+	private JLabel accountIDLabel, accountNumberLabel, firstNameLabel, surnameLabel, accountTypeLabel, balanceLabel, overdraftLabel;
+	private JTextField accountIDTextField, accountNumberTextField, firstNameTextField, surnameTextField, accountTypeTextField, balanceTextField, overdraftTextField;
 	static JFileChooser fc;
 	JTable jTable;
 	double interestRate;
-	
+	private String toWithdraw, accNum;
 	boolean openValues, found;
 	int currentItem = 0;
 	BankApplication bankapp;
@@ -258,8 +258,8 @@ public class DealWithJFrames extends JFrame{
     	
     	withdraw.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				String accNum = JOptionPane.showInputDialog("Account number to withdraw from: ");
-				String toWithdraw = JOptionPane.showInputDialog("Account found, Enter Amount to Withdraw: ");
+				accNum = JOptionPane.showInputDialog("Account number to withdraw from: ");
+				toWithdraw = JOptionPane.showInputDialog("Account found, Enter Amount to Withdraw: ");
 				
 				for (Map.Entry<Integer, BankAccount> entry : table.entrySet()) {
 					
@@ -272,14 +272,12 @@ public class DealWithJFrames extends JFrame{
 							if(Double.parseDouble(toWithdraw) > entry.getValue().getBalance() + entry.getValue().getOverdraft())
 								JOptionPane.showMessageDialog(null, "Transaction exceeds overdraft limit");
 							else{
-								entry.getValue().setBalance(entry.getValue().getBalance() - Double.parseDouble(toWithdraw));
-								displayDetails(entry.getKey());
+								calculateBalance(entry);
 							}
 						}
 						else if(entry.getValue().getAccountType().trim().equals("Deposit")){
 							if(Double.parseDouble(toWithdraw) <= entry.getValue().getBalance()){
-								entry.getValue().setBalance(entry.getValue().getBalance()-Double.parseDouble(toWithdraw));
-								displayDetails(entry.getKey());
+								calculateBalance(entry);
 							}
 							else
 								JOptionPane.showMessageDialog(null, "Insufficient funds.");
@@ -287,7 +285,15 @@ public class DealWithJFrames extends JFrame{
 					}					
 				}
 			}
+
+			private void calculateBalance(Entry<Integer, BankAccount> entry) {
+				entry.getValue().setBalance(entry.getValue().getBalance() - Double.parseDouble(toWithdraw));
+				displayDetails(entry.getKey());
+				
+			}
 		});
+    	
+    
     	
     	deposit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -299,7 +305,7 @@ public class DealWithJFrames extends JFrame{
 						String toDeposit = JOptionPane.showInputDialog("Account found, Enter Amount to Deposit: ");
 						entry.getValue().setBalance(entry.getValue().getBalance() + Double.parseDouble(toDeposit));
 						displayDetails(entry.getKey());
-						//balanceTextField.setText(entry.getValue().getBalance()+"");
+						
 					}
 				}
 				if (!found)
@@ -445,13 +451,17 @@ public class DealWithJFrames extends JFrame{
 		ActionListener first = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				saveOpenValues();
+				if(table.size() == 0) {
+					JOptionPane.showMessageDialog(null, "Empty Set");
+				}else {
 				
-				currentItem=0;
-				while(!table.containsKey(currentItem)){
-					currentItem++;
+					saveOpenValues();
+					currentItem=0;
+					while(!table.containsKey(currentItem)){
+						currentItem++;
+					}
+					displayDetails(currentItem);
 				}
-				displayDetails(currentItem);
 			}
 		};
 		
@@ -459,26 +469,31 @@ public class DealWithJFrames extends JFrame{
 		ActionListener next1 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				
-				ArrayList<Integer> keyList = new ArrayList<Integer>();
-				int i=0;
-		
-				while(i<TABLE_SIZE){
-					i++;
-					if(table.containsKey(i))
-						keyList.add(i);
-				}
+				if(table.size() <= 1) {
+					JOptionPane.showMessageDialog(null, "No more to show");
+				}else {
 				
-				int maxKey = Collections.max(keyList);
-		
-				saveOpenValues();	
-		
-					if(currentItem<maxKey){
-						currentItem++;
-						while(!table.containsKey(currentItem)){
-							currentItem++;
-						}
+					ArrayList<Integer> keyList = new ArrayList<Integer>();
+					int i=0;
+			
+					while(i<TABLE_SIZE){
+						i++;
+						if(table.containsKey(i))
+							keyList.add(i);
 					}
-					displayDetails(currentItem);			
+					
+					int maxKey = Collections.max(keyList);
+			
+					saveOpenValues();	
+			
+						if(currentItem<maxKey){
+							currentItem++;
+							while(!table.containsKey(currentItem)){
+								currentItem++;
+							}
+						}
+						displayDetails(currentItem);			
+				}
 			}
 		};
 		
@@ -487,39 +502,45 @@ public class DealWithJFrames extends JFrame{
 		ActionListener prev = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				ArrayList<Integer> keyList = new ArrayList<Integer>();
-				int i=0;
-		
-				while(i<TABLE_SIZE){
-					i++;
-					if(table.containsKey(i))
-						keyList.add(i);
-				}
+				if(table.size() <= 1) {
+					JOptionPane.showMessageDialog(null, "No more to show");
+				}else {
 				
-				int minKey = Collections.min(keyList);
-				
-				if(currentItem>minKey){
-					currentItem--;
-					while(!table.containsKey(currentItem)){
-						currentItem--;
+					ArrayList<Integer> keyList = new ArrayList<Integer>();
+					int i=0;
+			
+					while(i<TABLE_SIZE){
+						i++;
+						if(table.containsKey(i))
+							keyList.add(i);
 					}
+					
+					int minKey = Collections.min(keyList);
+					
+					if(currentItem>minKey){
+						currentItem--;
+						while(!table.containsKey(currentItem)){
+							currentItem--;
+						}
+					}
+					displayDetails(currentItem);				
 				}
-				displayDetails(currentItem);				
 			}
 		};
 	
 		ActionListener last = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveOpenValues();
 				
-				currentItem =29;
-								
-				while(!table.containsKey(currentItem)){
-					currentItem--;
-					
+				if(table.size() == 0) {
+					JOptionPane.showMessageDialog(null, "Empty Set");
+				}else {
+					saveOpenValues();
+					currentItem =29;		
+					while(!table.containsKey(currentItem)){
+						currentItem--;
+					}
+					displayDetails(currentItem);
 				}
-				
-				displayDetails(currentItem);
 			}
 		};
 		
